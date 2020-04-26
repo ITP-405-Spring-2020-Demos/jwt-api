@@ -1,11 +1,23 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Op } = require('sequelize');
+const cors = require('cors');
 
 const { Playlist, Track } = require('./models');
 
 const app = express();
+const { APP_ENV } = process.env;
+const corsOptions = {};
 
+if (APP_ENV === 'local') {
+  corsOptions.origin = 'http://localhost:4200';
+} else {
+  // corsOptions.origin = 'production URL here';
+}
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.get('/api/playlists', async function (request, response) {
