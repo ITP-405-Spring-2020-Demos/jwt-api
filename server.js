@@ -1,25 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const Playlist = require('./models/playlist');
-const Track = require('./models/track');
-const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
-const { Op } = Sequelize;
+const { Playlist, Track } = require('./models');
+
 const app = express();
 
 app.use(bodyParser.json());
-
-Playlist.belongsToMany(Track, {
-  through: 'playlist_track',
-  foreignKey: 'PlaylistId',
-  timestamps: false
-});
-
-Track.belongsToMany(Playlist, {
-  through: 'playlist_track',
-  foreignKey: 'TrackId',
-  timestamps: false
-});
 
 app.get('/api/playlists', async function(request, response) {
   const filter = {};
