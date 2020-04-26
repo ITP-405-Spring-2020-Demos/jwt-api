@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.get('/api/playlists', async function(request, response) {
+app.get('/api/playlists', async function (request, response) {
   const filter = {};
   const { q } = request.query;
 
@@ -16,9 +16,9 @@ app.get('/api/playlists', async function(request, response) {
     filter = {
       where: {
         name: {
-          [Op.like]: `${q}%`
-        }
-      }
+          [Op.like]: `${q}%`,
+        },
+      },
     };
   }
 
@@ -26,11 +26,11 @@ app.get('/api/playlists', async function(request, response) {
   response.json(playlists);
 });
 
-app.get('/api/playlists/:id', async function(request, response) {
+app.get('/api/playlists/:id', async function (request, response) {
   const { id } = request.params;
 
   const playlist = await Playlist.findByPk(id, {
-    include: [Track]
+    include: [Track],
   });
 
   if (playlist) {
