@@ -4,11 +4,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { Op } = require('sequelize');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const { Playlist, Track } = require('./models');
 
 const app = express();
-const { APP_ENV } = process.env;
+const { APP_ENV, PRIVATE_KEY } = process.env;
 const corsOptions = {};
 
 if (APP_ENV === 'local') {
@@ -19,6 +20,17 @@ if (APP_ENV === 'local') {
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
+app.post('/api/token', (request, response) => {
+  const { username, password } = request.body;
+
+  if (username === 'dtang' && password === 'password') {
+    const token = jwt.sign({ name: 'David' }, PRIVATE_KEY);
+    response.json({ token });
+  } else {
+    response.status(401).end();
+  }
+});
 
 app.get('/api/playlists', async function (request, response) {
   const filter = {};
