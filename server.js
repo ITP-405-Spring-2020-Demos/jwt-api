@@ -22,7 +22,9 @@ app.post('/api/token', async function (request, response) {
   const { username, password } = request.body;
 
   if (username === 'dtang' && password === 'password') {
-    const token = jwt.sign({ id: 0, name: 'David' }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: 0, name: 'David' }, process.env.JWT_SECRET, {
+      expiresIn: 5, // 5 seconds
+    });
     response.json({ token });
   } else {
     response.status(401).send();
