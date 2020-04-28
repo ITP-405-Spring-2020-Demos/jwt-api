@@ -1,7 +1,10 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Op } = require('sequelize');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const { Playlist, Track } = require('./models');
 
@@ -13,6 +16,17 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+
+app.post('/api/token', async function (request, response) {
+  const { username, password } = request.body;
+
+  if (username === 'dtang' && password === 'password') {
+    const token = jwt.sign({ id: 0, name: 'David' }, process.env.JWT_SECRET);
+    response.json({ token });
+  } else {
+    response.status(401).send();
+  }
+});
 
 app.get('/api/playlists', async function (request, response) {
   const filter = {};
