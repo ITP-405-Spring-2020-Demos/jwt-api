@@ -7,6 +7,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 const { Playlist, Track } = require('./models');
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.post('/api/token', async function (request, response) {
   }
 });
 
-app.get('/api/playlists', async function (request, response) {
+app.get('/api/playlists', [auth], async function (request, response) {
   const filter = {};
   const { q } = request.query;
 
@@ -46,7 +47,7 @@ app.get('/api/playlists', async function (request, response) {
   response.json(playlists);
 });
 
-app.get('/api/playlists/:id', async function (request, response) {
+app.get('/api/playlists/:id', [auth], async function (request, response) {
   const { id } = request.params;
 
   const playlist = await Playlist.findByPk(id, {
