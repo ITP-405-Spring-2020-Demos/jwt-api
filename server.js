@@ -1,11 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Op } = require('sequelize');
+const cors = require('cors');
 
 const { Playlist, Track } = require('./models');
 
 const app = express();
 
+app.use(
+  cors({
+    origin: 'http://localhost:4200',
+  })
+);
 app.use(bodyParser.json());
 
 app.get('/api/playlists', async function (request, response) {
@@ -40,4 +46,4 @@ app.get('/api/playlists/:id', async function (request, response) {
   }
 });
 
-app.listen(process.env.PORT || 8000);
+app.listen(process.env.PORT || 8080);
